@@ -1,0 +1,24 @@
+{
+    "showType": {
+        "page": {
+            "movieUrl": {
+                "movieContent": {
+                    "movie": "movieInfo"
+                },
+                "actor": "actorInfo"
+            }
+        }
+    },
+    "cinema": {
+        "page": {
+            "cinemaUrl":{
+                "movieList": {
+                    "dateArrange": {
+                        "screeningRoomInfo": "screeningRoomInfo",
+                        "screeningInfo": "screeningInfo",
+                    }
+                }
+            }
+        }
+    }
+}
