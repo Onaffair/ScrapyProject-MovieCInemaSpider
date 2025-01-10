@@ -96,7 +96,7 @@ class CinemaSpider(scrapy.Spider):
 
                 if room_number not in screening_room_set:
                     screening_room_set.add(room_number)
-                    # yield from self.save_screening_room(cinema_name, room_number, 40)
+                    yield from self.save_screening_room(cinema_name, room_number, 40)
 
                 yield from self.save_screening(movie_name, room_number, screening_time, price)
 

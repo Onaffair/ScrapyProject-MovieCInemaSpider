@@ -38,20 +38,34 @@ ROBOTSTXT_OBEY = False
 
 # Override the default request headers:
 
+cookies = {
+    '_ga': 'GA1.1.427435205.1732029469',
+    '_lxsdk_cuid': '19345005032c8-0452f97f12a0d1-26011951-1fa400-19345005032c8',
+    'uuid_n_v': 'v1',
+    'uuid': '2D3DE750C96B11EF8BF5E789F57BC8028090C83F046C49CF99937114F4A20123',
+    '_lxsdk': '2D3DE750C96B11EF8BF5E789F57BC8028090C83F046C49CF99937114F4A20123',
+    '_csrf': 'f9b7af475b9c18f3ac7a859b90488ad551fe346db97e98a4959c00667efabdb6',
+    'Hm_lvt_e0bacf12e04a7bd88ddbd9c74ef2b533': '1736498191,1736512370,1736512467,1736512484',
+    'HMACCOUNT': '0AF1B23D10885BE0',
+    '_ga_WN80P4PSY7': 'GS1.1.1736512369.55.1.1736512486.0.0.0',
+    'Hm_lpvt_e0bacf12e04a7bd88ddbd9c74ef2b533': '1736512486',
+    '__mta': '242479805.1732029470408.1736512485481.1736512486203.50',
+    '_lxsdk_s': '1945033f41b-806-941-712%7C%7C10',
+}
 
 headers = {
-    'Accept': '*/*',
-    'Accept-Language': 'zh-CN,zh;q=0.9,en-GB;q=0.8,en-US;q=0.7,en;q=0.6',
-    'Cache-Control': 'no-cache',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+    'Accept-Language': 'zh-CN,zh;q=0.9',
+    'Cache-Control': 'max-age=0',
     'Connection': 'keep-alive',
-    # 'Cookie': 'uuid_n_v=v1; uuid=8FDACE00A03F11EFB8546310D54B6F2217DB1665089D4A56B8E4A74D92A8D0AD; _lxsdk_cuid=1931bc9da25c8-07a774803b3189-26011951-1fa400-1931bc9da25c8; _lxsdk=8FDACE00A03F11EFB8546310D54B6F2217DB1665089D4A56B8E4A74D92A8D0AD; _ga=GA1.1.688149771.1731338034; _lx_utm=utm_source%3Dbing%26utm_medium%3Dorganic; _csrf=dd7284c6210021360b0afceee236e7073278351d78c4543060dd590b3b5b2882; Hm_lvt_e0bacf12e04a7bd88ddbd9c74ef2b533=1731747416,1731770496,1731772665,1731779249; HMACCOUNT=94AE80689864874E; __mta=210591402.1731338034555.1731770496925.1731779318553.31; _lxsdk_s=1933616451a-034-3f9-4c3%7C%7C10; _ga_WN80P4PSY7=GS1.1.1731779249.10.1.1731780653.0.0.0; Hm_lpvt_e0bacf12e04a7bd88ddbd9c74ef2b533=1731780653',
-    'Pragma': 'no-cache',
-    'Referer': 'https://www.maoyan.com/films/1393396',
-    'Sec-Fetch-Dest': 'empty',
-    'Sec-Fetch-Mode': 'cors',
+    # 'Cookie': '_ga=GA1.1.427435205.1732029469; _lxsdk_cuid=19345005032c8-0452f97f12a0d1-26011951-1fa400-19345005032c8; uuid_n_v=v1; uuid=2D3DE750C96B11EF8BF5E789F57BC8028090C83F046C49CF99937114F4A20123; _lxsdk=2D3DE750C96B11EF8BF5E789F57BC8028090C83F046C49CF99937114F4A20123; _csrf=f9b7af475b9c18f3ac7a859b90488ad551fe346db97e98a4959c00667efabdb6; Hm_lvt_e0bacf12e04a7bd88ddbd9c74ef2b533=1736498191,1736512370,1736512467,1736512484; HMACCOUNT=0AF1B23D10885BE0; _ga_WN80P4PSY7=GS1.1.1736512369.55.1.1736512486.0.0.0; Hm_lpvt_e0bacf12e04a7bd88ddbd9c74ef2b533=1736512486; __mta=242479805.1732029470408.1736512485481.1736512486203.50; _lxsdk_s=1945033f41b-806-941-712%7C%7C10',
+    'Referer': 'https://www.maoyan.com/films',
+    'Sec-Fetch-Dest': 'document',
+    'Sec-Fetch-Mode': 'navigate',
     'Sec-Fetch-Site': 'same-origin',
+    'Sec-Fetch-User': '?1',
+    'Upgrade-Insecure-Requests': '1',
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
-    'X-Requested-With': 'XMLHttpRequest',
     'sec-ch-ua': '"Chromium";v="130", "Google Chrome";v="130", "Not?A_Brand";v="99"',
     'sec-ch-ua-mobile': '?0',
     'sec-ch-ua-platform': '"Windows"',
@@ -85,51 +99,13 @@ RETRY_TIMES = 3
 RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 404, 408]
 RANDOMIZE_PROXY_ORDER = True
 
-# Enable or disable downloader middlewares
-# See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-# DOWNLOADER_MIDDLEWARES = {
-#    "ScrapyProject.middlewares.ScrapyprojectDownloaderMiddleware": 543,
-# }
-
-# Enable or disable extensions
-# See https://docs.scrapy.org/en/latest/topics/extensions.html
-# EXTENSIONS = {
-#    "scrapy.extensions.telnet.TelnetConsole": None,
-# }
-
-# Configure item pipelines
-# See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-# ITEM_PIPELINES = {
-#    "ScrapyProject.pipelines.ScrapyprojectPipeline": 300,
-# }
-
-# Enable and configure the AutoThrottle extension (disabled by default)
-# See https://docs.scrapy.org/en/latest/topics/autothrottle.html
-# AUTOTHROTTLE_ENABLED = True
-# The initial download delay
-# AUTOTHROTTLE_START_DELAY = 5
-# The maximum download delay to be set in case of high latencies
-# AUTOTHROTTLE_MAX_DELAY = 60
-# The average number of requests Scrapy should be sending in parallel to
-# each remote server
-# AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
-# Enable showing throttling stats for every response received:
-# AUTOTHROTTLE_DEBUG = False
-
-# Enable and configure HTTP caching (disabled by default)
-# See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
-# HTTPCACHE_ENABLED = True
-# HTTPCACHE_EXPIRATION_SECS = 0
-# HTTPCACHE_DIR = "httpcache"
-# HTTPCACHE_IGNORE_HTTP_CODES = []
-# HTTPCACHE_STORAGE = "scrapy.extensions.httpcache.FilesystemCacheStorage"
-
-# Set settings whose default value is deprecated to a future-proof value
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 
-
+DOWNLOADER_MIDDLEWARES.update({
+    "ScrapyProject.middlewares.CaptchaDetectionMiddleware": 543,
+})
 
 
 #间隔

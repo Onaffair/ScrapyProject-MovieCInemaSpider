@@ -4,6 +4,10 @@
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+from scrapy.downloadermiddlewares.retry import RetryMiddleware
+from scrapy.exceptions import IgnoreRequest
+from scrapy.core.downloader.handlers.http11 import TunnelError
+from twisted.internet.error import TimeoutError, TCPTimedOutError, ConnectionRefusedError, ConnectionDone, ConnectError, DNSLookupError
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
@@ -11,6 +15,58 @@ from itemadapter import is_item, ItemAdapter
 
 # ScrapyProject/middlewares.py
 
+
+class CaptchaDetectionMiddleware(RetryMiddleware):
+    def __init__(self, settings):
+        super(CaptchaDetectionMiddleware, self).__init__(settings)
+        self.proxy_list = settings.getlist('PROXY_LIST')  # 从settings.py加载IP列表
+        self.current_proxy_index = 0  # 当前使用的IP索引
+        self.logger = None  # 初始化logger属性
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        # 从crawler中初始化中间件
+        middleware = cls(crawler.settings)
+        middleware.logger = crawler.spider.logger  # 初始化logger
+        return middleware
+
+    def get_next_proxy(self):
+        """获取下一个可用的代理IP"""
+        print(f'CaptchaDetectionMiddleware: 正在切换IP')
+        if not self.proxy_list:
+            return None
+
+        # 切换到下一个IP
+        self.current_proxy_index = (self.current_proxy_index + 1) % len(self.proxy_list)
+        return self.proxy_list[self.current_proxy_index]
+
+    def process_response(self, request, response, spider):
+        # print(f'CaptchaDetectionMiddleware: {request.url}')
+        captcha_identifier = 'verify'
+        if captcha_identifier in response.url or captcha_identifier in response.text:
+            self.logger.warning(f'验证码检测到，正在切换IP: {request.url}')
+            new_proxy = self.get_next_proxy()  # 获取下一个代理IP
+            print(new_proxy)
+            if new_proxy:
+                request.meta['proxy'] = new_proxy  # 设置新的代理IP
+                return self._retry(request, IgnoreRequest(), spider)  # 重试请求
+            else:
+                self.logger.error('没有可用的代理IP，无法切换')
+                return response
+        else:
+            return response
+
+    def process_exception(self, request, exception, spider):
+        print("CaptchaDetectionMiddleware: 处理异常")
+        if isinstance(exception, (DNSLookupError, TimeoutError, TCPTimedOutError, ConnectionRefusedError, ConnectionDone, ConnectError, TunnelError)):
+            self.logger.warning(f'请求失败，正在切换IP: {request.url}')
+            new_proxy = self.get_next_proxy()  # 获取下一个代理IP
+            if new_proxy:
+                request.meta['proxy'] = new_proxy  # 设置新的代理IP
+                return self._retry(request, exception, spider)  # 重试请求
+            else:
+                self.logger.error('没有可用的代理IP，无法切换')
+                return None
 
 
 class ScrapyprojectSpiderMiddleware:
