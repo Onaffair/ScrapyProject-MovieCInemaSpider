@@ -225,9 +225,9 @@ def saveScreening():
         screenings = json.loads(f.read())
 
         # 删除所有时间小于今天的播放安排
-        today = datetime.now().strftime('%Y-%m-%d')
-        cursor.execute("DELETE FROM screening WHERE DATE(screening_time) < %s", (today,))
-        sql_commit()
+        # today = datetime.now().strftime('%Y-%m-%d')
+        # cursor.execute("DELETE FROM screening WHERE DATE(screening_time) < %s", (today,))
+        # sql_commit()
 
         # 查询已存在的放映安排
         cursor.execute("SELECT movie_id, room_id, screening_time FROM screening")

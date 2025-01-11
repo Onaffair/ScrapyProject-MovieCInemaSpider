@@ -1,7 +1,12 @@
 import re
+import urllib
+
+import requests
 import scrapy
 from bs4 import BeautifulSoup
 from ScrapyProject.items import MovieItem, ActorItem, MovieActorItem
+from ScrapyProject.methods import *
+
 
 
 class MaoyanSpider(scrapy.Spider):
@@ -19,15 +24,23 @@ class MaoyanSpider(scrapy.Spider):
         self.precessActorByName = set()
 
     def parse(self, response, **kwargs):
+        print(response.url)
         soup = BeautifulSoup(response.text, "html.parser")
+
         movies = soup.select("div.movie-item.film-channel")
         for movie in movies:
             url = movie.select_one("a")
             if url:
-                detail_url = f"https://maoyan.com/ajax/{url['href']}"
-                print(detail_url)
-                yield response.follow(detail_url, callback=self.parse_detail)
+                detail_url = f"https://www.maoyan.com/ajax{url['href']}"
+                cookies = getCookies()
+                params = getParams() #params
+                headers = getHeaders(detail_url, params)
 
+                query_string = urllib.parse.urlencode(params)
+                detail_url = f"{detail_url}?{query_string}"
+                res = requests.get(detail_url, headers=headers, cookies=cookies,params=params)
+
+                yield from self.parse_detail(res)
         next_page_url = soup.select_one("div.movies-pager ul li:last-child a")
         if next_page_url and next_page_url.get("href") != "javascript:void(0);":
             yield response.follow(next_page_url["href"], callback=self.parse)
@@ -36,7 +49,7 @@ class MaoyanSpider(scrapy.Spider):
         soup = BeautifulSoup(response.text, "html.parser")
         title = soup.select_one("h1")
         title_text = title.text.strip() if title else None
-
+        print(title_text)
         if title_text and title_text not in self.processMovieByTitle:
             self.processMovieByTitle.add(title_text)
             movie_item = MovieItem()
@@ -79,8 +92,8 @@ class MaoyanSpider(scrapy.Spider):
 
             movie_item["collection_count"] = 0
             yield movie_item
-
     def parse_actor_detail(self, response):
+
         soup = BeautifulSoup(response.text, "html.parser")
         movie_name = soup.select_one("h1")
         movie_name = movie_name.text.strip() if movie_name else "Unknown"
@@ -117,5 +130,14 @@ class MaoyanSpider(scrapy.Spider):
                 yield movie_actor_item
 
     def parse_detail(self, response):
+        # print("headers:", response.headers)
+        # print("\n",response.text)
         yield from self.parse_movie_detail(response)
         yield from self.parse_actor_detail(response)
+
+
+
+
+
+
+

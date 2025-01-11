@@ -67,8 +67,6 @@ class CaptchaDetectionMiddleware(RetryMiddleware):
             else:
                 self.logger.error('没有可用的代理IP，无法切换')
                 return None
-
-
 class ScrapyprojectSpiderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the spider middleware does not modify the
