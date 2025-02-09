@@ -47,7 +47,7 @@ class CinemaSpider(scrapy.Spider):
             contact_number = contact_elem.text.strip() if contact_elem else ""
             cinema_item['contact_number'] = re.sub(r'电话：', "", contact_number)
 
-            # yield cinema_item
+            yield cinema_item
 
             # 播映信息
             yield from self.parse_screening(response, name)

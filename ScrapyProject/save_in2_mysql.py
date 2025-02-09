@@ -64,7 +64,6 @@ def saveMovie():
     movies_path = os.path.join(base_dir, 'movie.json')
     with open(movies_path, 'r', encoding='utf-8') as f:
         movies = json.loads(f.read())
-
         # 查询现有电影信息到内存
         cursor.execute("SELECT movie_id, title, rating, director, release_date, production_region, synopsis, poster_url, tags, collection_count FROM movie")
         existing_movies = {row[1]: row for row in cursor.fetchall()}
@@ -74,9 +73,10 @@ def saveMovie():
 
         for item in movies:
             title = item['title']
+
             release_date = format_release_date_for_movie(item['release_date'])
 
-            if title in existing_movies:
+            if title in existing_movies.keys():
                 existing_record = existing_movies[title]
                 # 判断是否需要更新
                 if (existing_record[2] != item['rating'] or
@@ -99,7 +99,7 @@ def saveMovie():
                     item['production_region'].strip(), item['synopsis'],
                     item['poster_url'], item['tags'], item['collection_count']
                 ))
-
+        print(insert_data)
         # 批量插入和更新
         if insert_data:
             sql_insert = """INSERT INTO movie (title, rating, director, release_date, production_region, synopsis, poster_url, tags, collection_count)
@@ -142,7 +142,7 @@ def saveMovieActor():
 
         # 查询现有的电影和演员对应关系到内存
         cursor.execute("SELECT movie_id, actor_id, role FROM movie_actor")
-        existing_movie_actor = {(row[0], row[1]): row[2] for row in cursor.fetchall()}
+        existing_movie_actor = set((row[0], row[1]) for row in cursor.fetchall())
 
         # 查询所有电影和演员的信息到内存
         cursor.execute("SELECT movie_id, title FROM movie")
@@ -152,32 +152,24 @@ def saveMovieActor():
         ac2id = {row[1]: row[0] for row in cursor.fetchall()}
 
         insert_data = []
-        update_data = []
 
         for item in movieActors:
             movie_id = mv2id.get(item['movie_name'])
             actor_id = ac2id.get(item['actor_name'])
-
             if movie_id and actor_id:
                 key = (movie_id, actor_id)
-                if key in existing_movie_actor:
-                    # 如果存在，检查是否需要更新
-                    if existing_movie_actor[key] != item['role']:
-                        update_data.append((item['role'], movie_id, actor_id))
-                else:
-                    # 如果不存在则准备插入
+                if key not in existing_movie_actor:
                     insert_data.append((movie_id, actor_id, item['role']))
+                existing_movie_actor.add(key)
+
 
         # 批量插入和更新
         if insert_data:
             sql_insert = "INSERT INTO movie_actor (movie_id, actor_id, role) VALUES (%s, %s, %s)"
             cursor.executemany(sql_insert, insert_data)
 
-        if update_data:
-            sql_update = "UPDATE movie_actor SET role=%s WHERE movie_id=%s AND actor_id=%s"
-            cursor.executemany(sql_update, update_data)
-
         sql_commit()
+
 
 def saveCinema():
     cinema_path = os.path.join(base_dir,'cinema.json')
@@ -262,16 +254,16 @@ def saveScreening():
 def main():
     saveMovie()
     print('saveMovie success')
-    saveActor()
-    print('saveActor success')
-    saveMovieActor()
-    print('saveMovieActor success')
-    saveCinema()
-    print('saveCinema success')
-    saveScreeningRoom()
-    print('saveScreeningRoom success')
-    saveScreening()
-    print('saveScreening success')
+    # saveActor()
+    # print('saveActor success')
+    # saveMovieActor()
+    # print('saveMovieActor success')
+    # saveCinema()
+    # print('saveCinema success')
+    # saveScreeningRoom()
+    # print('saveScreeningRoom success')
+    # saveScreening()
+    # print('saveScreening success')
     close_mysql()
 
 
